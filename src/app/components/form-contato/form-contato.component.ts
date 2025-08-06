@@ -50,6 +50,7 @@ import { RouterModule } from '@angular/router';
 })
 export class FormContatoComponent {
   contatoForm: FormGroup;
+  form: any;
 
   constructor(private fb: FormBuilder) {
     this.contatoForm = this.fb.group({

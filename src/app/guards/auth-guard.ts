@@ -1,8 +1,11 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
 
 @Injectable({ providedIn: 'root' })
-export class AuthGuard implements CanActivate {
+export class authGuard implements CanActivate {
+  static canActivate(arg0: RouterStateSnapshot | ActivatedRouteSnapshot): any {
+    throw new Error('Method not implemented.');
+  }
   constructor(private router: Router) {}
 
   canActivate(): boolean {

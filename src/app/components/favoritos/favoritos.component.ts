@@ -13,4 +13,5 @@ export class FavoritosComponent {
     { nome: 'João' },
     { nome: 'Maria' },
   ];
+  contatos: any;
 }
