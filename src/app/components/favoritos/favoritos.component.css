@@ -1,0 +1,22 @@
+.container {
+    margin: 30px auto;
+  }
+  
+  h2 {
+    margin-bottom: 20px;
+  }
+  
+  .list-group-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .badge {
+    font-size: 14px;
+  }
+  
+  .btn-danger {
+    margin-left: 10px;
+  }
+  

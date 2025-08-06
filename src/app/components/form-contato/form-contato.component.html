@@ -1,7 +1,32 @@
-<form>
-    <label>Nome:</label>
-    <input type="text" required />
-    <label>Email:</label>
-    <input type="email" required />
-    <button type="submit">Salvar</button>
-  </form>
+<div class="container mt-5">
+  <div class="card">
+    <div class="card-header bg-success text-white">
+      {{ modoEdicao ? 'Editar Contato' : 'Novo Contato' }}
+    </div>
+    <div class="card-body">
+      <form [formGroup]="formContato" (ngSubmit)="salvar()">
+        <div class="mb-3">
+          <label for="nome" class="form-label">Nome</label>
+          <input type="text" id="nome" class="form-control" formControlName="nome" />
+        </div>
+
+        <div class="mb-3">
+          <label for="email" class="form-label">Email</label>
+          <input type="email" id="email" class="form-control" formControlName="email" />
+        </div>
+
+        <div class="mb-3">
+          <label for="telefone" class="form-label">Telefone</label>
+          <input type="text" id="telefone" class="form-control" formControlName="telefone" />
+        </div>
+
+        <div class="mb-3">
+          <label for="endereco" class="form-label">Endereço</label>
+          <input type="text" id="endereco" class="form-control" formControlName="endereco" />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Salvar</button>
+      </form>
+    </div>
+  </div>
+</div>

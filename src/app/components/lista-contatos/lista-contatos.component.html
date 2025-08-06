@@ -1,4 +1,25 @@
-<h2>Lista de Contatos</h2>
-<ul>
-  <li *ngFor="let contato of contatos">{{ contato.nome }}</li>
-</ul>
+<div class="container mt-4">
+  <h2>Lista de Contatos</h2>
+  <table class="table table-striped table-hover mt-3">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>Email</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let contato of contatos">
+        <td>{{ contato.contato_id }}</td>
+        <td>{{ contato.nome }}</td>
+        <td>{{ contato.email }}</td>
+        <td>
+          <a [routerLink]="['/detalhe', contato.contato_id]" class="btn btn-sm btn-primary">
+            Ver Detalhes
+          </a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

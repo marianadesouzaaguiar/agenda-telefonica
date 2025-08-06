@@ -1,3 +1,15 @@
-<h2>Detalhes do Contato</h2>
-<p>Nome: {{ contato.nome }}</p>
-<p>Email: {{ contato.email }}</p>
+<div class="container mt-4">
+    <div class="card">
+      <div class="card-header bg-primary text-white">
+        Detalhes do Contato
+      </div>
+      <div class="card-body">
+        <h5 class="card-title">{{ contato.nome }}</h5>
+        <p class="card-text"><strong>Email:</strong> {{ contato.email }}</p>
+        <p class="card-text"><strong>Telefone:</strong> {{ contato.telefone }}</p>
+        <p class="card-text"><strong>Endereço:</strong> {{ contato.endereco }}</p>
+        <button class="btn btn-secondary" routerLink="/favoritos">Ver Favoritos</button>
+      </div>
+    </div>
+  </div>
+  
