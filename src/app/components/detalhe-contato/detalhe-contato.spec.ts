@@ -2,7 +2,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { DetalheContatoComponent } from './detalhe-contato.component';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
-import { ContatoServiceComponent } from '../contato.service.component';
+import { ContatoService} from '../../services/contato.service';
+
 
 describe('DetalheContatoComponent', () => {
   let component: DetalheContatoComponent;
@@ -17,7 +18,7 @@ describe('DetalheContatoComponent', () => {
           useValue: { snapshot: { paramMap: { get: () => '1' } } }
         },
         {
-          provide: ContatoServiceComponent,
+          provide: ContatoService,
           useValue: {
             getContato: () => of({ id: 1, nome: 'João', telefone: '123456789' })
           }

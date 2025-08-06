@@ -1,0 +1,9 @@
+<nav class="navbar">
+    <div class="logo">Agenda Telefônica</div>
+    <div class="nav-links">
+      <a routerLink="/login">Login</a>
+      <a routerLink="/contatos">Contatos</a>
+      <button *ngIf="isLoggedIn" (click)="logout()">Sair</button>
+    </div>
+  </nav>
+  

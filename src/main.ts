@@ -1,13 +1,15 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { AppComponent } from './app/app.component';
-import { APP_ROUTES } from './app/app-routing.module';
+import { provideRouter } from '@angular/router';
+import { routes } from './app/app.routes';
+import { importProvidersFrom } from '@angular/core';
 import { provideAnimations } from '@angular/platform-browser/animations';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 bootstrapApplication(AppComponent, {
   providers: [
-    APP_ROUTES,
-    provideAnimations()
+    provideRouter(routes),
+    provideAnimations(),
+    importProvidersFrom(MatSnackBarModule)
   ]
 }).catch(err => console.error(err));
-import { provideRouter } from '@angular/router';
-import { provideHttpClient } from '@angular/common/http';
