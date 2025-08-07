@@ -1,31 +1,43 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private loggedIn = new BehaviorSubject<boolean>(this.hasToken());
+  // BehaviorSubject para controlar o estado do login
+  private isLoggedInSubject = new BehaviorSubject<boolean>(false);
+  public isLoggedIn$ = this.isLoggedInSubject.asObservable();
 
-  public isLoggedIn$: Observable<boolean> = this.loggedIn.asObservable();
-
-  constructor() {}
-
-  login(token: string) {
-    localStorage.setItem('auth_token', token);
-    this.loggedIn.next(true);
+  constructor() {
+    // Inicializa o estado verificando o token, só se estiver no browser
+    if (typeof window !== 'undefined' && window.localStorage) {
+      const token = localStorage.getItem('token');
+      this.isLoggedInSubject.next(!!token);
+    }
   }
 
-  logout() {
-    localStorage.removeItem('auth_token');
-    this.loggedIn.next(false);
-  }
-
-  private hasToken(): boolean {
-    return !!localStorage.getItem('auth_token');
-  }
-
+  // Método que seu AuthGuard pode usar
   isAuthenticated(): boolean {
-    return this.hasToken();
+    if (typeof window !== 'undefined' && window.localStorage) {
+      return !!localStorage.getItem('token');
+    }
+    return false;
+  }
+
+  // Simulação de login: salvar token e atualizar estado
+  login(token: string): void {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      localStorage.setItem('token', token);
+      this.isLoggedInSubject.next(true);
+    }
+  }
+
+  // Logout: remover token e atualizar estado
+  logout(): void {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      localStorage.removeItem('token');
+      this.isLoggedInSubject.next(false);
+    }
   }
 }

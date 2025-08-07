@@ -10,6 +10,7 @@ import { FormContatoComponent } from './components/form-contato/form-contato.com
 
 // AppRouting como standalone também
 import { routes as AppRoutes } from './app.routes';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
   imports: [
@@ -18,7 +19,8 @@ import { routes as AppRoutes } from './app.routes';
     MatToolbarModule,
     AppComponent,
     LoginComponent,
-    FormContatoComponent
+    FormContatoComponent,
+    CommonModule
   ],
   bootstrap: [AppComponent]
 })
