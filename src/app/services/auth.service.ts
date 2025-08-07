@@ -1,38 +1,31 @@
-import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
+import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private _isLoggedIn = new BehaviorSubject<boolean>(false);
-  public isLoggedIn$: Observable<boolean> = this._isLoggedIn.asObservable();
+  private loggedIn = new BehaviorSubject<boolean>(this.hasToken());
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
-    // Só acessa localStorage se estiver no navegador
-    if (isPlatformBrowser(this.platformId)) {
-      const token = localStorage.getItem('token');
-      this._isLoggedIn.next(!!token);
-    }
+  public isLoggedIn$: Observable<boolean> = this.loggedIn.asObservable();
+
+  constructor() {}
+
+  login(token: string) {
+    localStorage.setItem('auth_token', token);
+    this.loggedIn.next(true);
   }
 
-  login(token: string): void {
-    if (isPlatformBrowser(this.platformId)) {
-      localStorage.setItem('token', token);
-    }
-    this._isLoggedIn.next(true);
+  logout() {
+    localStorage.removeItem('auth_token');
+    this.loggedIn.next(false);
   }
 
-  logout(): void {
-    if (isPlatformBrowser(this.platformId)) {
-      localStorage.removeItem('token');
-    }
-    this._isLoggedIn.next(false);
+  private hasToken(): boolean {
+    return !!localStorage.getItem('auth_token');
   }
 
-  // Método auxiliar para checar login sem usar subscribe
-  isLoggedIn(): boolean {
-    return this._isLoggedIn.getValue();
+  isAuthenticated(): boolean {
+    return this.hasToken();
   }
 }

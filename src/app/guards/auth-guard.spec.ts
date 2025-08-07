@@ -1,42 +1,40 @@
 import { TestBed } from '@angular/core/testing';
-import { authGuard } from './auth-guard';
+import { AuthGuard } from './auth-guard';
+import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
-import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 
-describe('authGuard', () => {
-  let mockAuthService: jasmine.SpyObj<AuthService>;
-  let mockRoute: ActivatedRouteSnapshot;
-  let mockState: RouterStateSnapshot;
+describe('AuthGuard', () => {
+  let guard: AuthGuard;
+  let authServiceSpy: jasmine.SpyObj<AuthService>;
+  let routerSpy: jasmine.SpyObj<Router>;
 
   beforeEach(() => {
-    mockAuthService = jasmine.createSpyObj('AuthService', ['isLoggedIn']);
+    authServiceSpy = jasmine.createSpyObj<AuthService>('AuthService', ['isAuthenticated']);
+    routerSpy = jasmine.createSpyObj<Router>('Router', ['navigate']);
 
     TestBed.configureTestingModule({
-      providers: [{ provide: AuthService, useValue: mockAuthService }],
+      providers: [
+        AuthGuard,
+        { provide: AuthService, useValue: authServiceSpy },
+        { provide: Router, useValue: routerSpy }
+      ]
     });
 
-    // Criando mocks simples para os argumentos
-    mockRoute = {} as ActivatedRouteSnapshot;
-    mockState = { url: '/teste' } as RouterStateSnapshot;
+    guard = TestBed.inject(AuthGuard);
   });
 
-  it('deve permitir acesso se o usuário estiver logado', () => {
-    mockAuthService.isLoggedIn.and.returnValue(true);
+  it('should allow navigation when authenticated', () => {
+    authServiceSpy.isAuthenticated.and.returnValue(true);
 
-    const result = TestBed.runInInjectionContext(() =>
-      authGuard(mockRoute, mockState)
-    );
-
-    expect(result).toBeTrue();
+    const canActivate = guard.canActivate();
+    expect(canActivate).toBeTrue();
   });
 
-  it('deve negar acesso se o usuário não estiver logado', () => {
-    mockAuthService.isLoggedIn.and.returnValue(false);
+  it('should block navigation when not authenticated', () => {
+    authServiceSpy.isAuthenticated.and.returnValue(false);
 
-    const result = TestBed.runInInjectionContext(() =>
-      authGuard(mockRoute, mockState)
-    );
-
-    expect(result).toBeFalse();
+    const canActivate = guard.canActivate();
+    expect(canActivate).toBeFalse();
+    expect(routerSpy.navigate).toHaveBeenCalledWith(['/login']);
   });
 });
