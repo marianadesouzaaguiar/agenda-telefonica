@@ -1,25 +1,28 @@
-<div class="container mt-4">
-  <h2>Lista de Contatos</h2>
-  <table class="table table-striped table-hover mt-3">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Nome</th>
-        <th>Email</th>
-        <th>Ações</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let contato of contatos">
-        <td>{{ contato.contato_id }}</td>
-        <td>{{ contato.nome }}</td>
-        <td>{{ contato.email }}</td>
-        <td>
-          <a [routerLink]="['/detalhe', contato.contato_id]" class="btn btn-sm btn-primary">
-            Ver Detalhes
-          </a>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Nome</th>
+      <th>Celular</th>
+      <th>Email</th>
+      <th>Telefone</th>
+      <th>Favorito</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let c of contatos">
+      <td>{{ c.nome }}</td>
+      <td>{{ c.celular }}</td>
+      <td>{{ c.email }}</td>
+      <td>{{ c.telefone }}</td>
+      <td>
+        <button (click)="favoritar(c.id!)" class="btn btn-sm btn-warning">
+          {{ c.favorito === 'S' ? '⭐' : '✩' }}
+        </button>
+      </td>
+      <td>
+        <button (click)="inativar(c.id!)" class="btn btn-sm btn-danger">Inativar</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
