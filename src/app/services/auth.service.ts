@@ -5,39 +5,48 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root'
 })
 export class AuthService {
-  // BehaviorSubject para controlar o estado do login
-  private isLoggedInSubject = new BehaviorSubject<boolean>(false);
-  public isLoggedIn$ = this.isLoggedInSubject.asObservable();
+  // Estado de login interno
+  private loggedIn = new BehaviorSubject<boolean>(this.hasToken());
 
-  constructor() {
-    // Inicializa o estado verificando o token, só se estiver no browser
-    if (typeof window !== 'undefined' && window.localStorage) {
-      const token = localStorage.getItem('token');
-      this.isLoggedInSubject.next(!!token);
-    }
-  }
+  // Observable para outros componentes acompanharem login/logout
+  isLoggedIn$ = this.loggedIn.asObservable();
 
-  // Método que seu AuthGuard pode usar
-  isAuthenticated(): boolean {
-    if (typeof window !== 'undefined' && window.localStorage) {
-      return !!localStorage.getItem('token');
-    }
-    return false;
-  }
+  constructor() {}
 
-  // Simulação de login: salvar token e atualizar estado
+  /**
+   * Salva o token e atualiza estado para "logado"
+   */
   login(token: string): void {
-    if (typeof window !== 'undefined' && window.localStorage) {
-      localStorage.setItem('token', token);
-      this.isLoggedInSubject.next(true);
-    }
+    localStorage.setItem('token', token);
+    this.loggedIn.next(true);
   }
 
-  // Logout: remover token e atualizar estado
+  /**
+   * Remove token e atualiza estado para "deslogado"
+   */
   logout(): void {
-    if (typeof window !== 'undefined' && window.localStorage) {
-      localStorage.removeItem('token');
-      this.isLoggedInSubject.next(false);
-    }
+    localStorage.removeItem('token');
+    this.loggedIn.next(false);
+  }
+
+  /**
+   * Verifica se o usuário está autenticado
+   */
+  isAuthenticated(): boolean {
+    return this.hasToken();
+  }
+
+  /**
+   * Retorna o token JWT
+   */
+  getToken(): string | null {
+    return localStorage.getItem('token');
+  }
+
+  /**
+   * Checa se existe token no localStorage
+   */
+  private hasToken(): boolean {
+    return !!localStorage.getItem('token');
   }
 }

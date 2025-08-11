@@ -1,16 +1,11 @@
 import { Routes } from '@angular/router';
-import { AuthGuard } from './guards/auth-guard';
-import { FormContatoComponent } from '../app/components/form-contato/form-contato.component';
-import { LoginComponent } from '../app/components/login/login.component';
+import { LoginComponent } from './components/login/login.component';
+import { ContatosComponent } from './components/contatos/contatos.component'; 
+import { DetalheContatoComponent } from './components/detalhe-contato/detalhe-contato.component'; 
 
 export const routes: Routes = [
-  {
-    path: '',
-    component: LoginComponent
-  },
-  {
-    path: 'contatos',
-    component: FormContatoComponent,
-    canActivate: [AuthGuard]
-  }
+  { path: 'login', component: LoginComponent },
+  { path: 'contatos', component: ContatosComponent },
+  { path: 'contatos/:id', component: DetalheContatoComponent }, // rota com parâmetro id
+  { path: '', redirectTo: 'login', pathMatch: 'full' }
 ];

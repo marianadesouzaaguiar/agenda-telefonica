@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Contato } from '../models/Contato.model'; // Importação correta do model
+import { Contato } from '../models/Contato.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ContatoService {
-  private apiUrl = 'http://localhost:8080/contatos';
+  private apiUrl = 'http://localhost:8081/contatos';
 
   constructor(private http: HttpClient) {}
 

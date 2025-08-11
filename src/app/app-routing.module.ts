@@ -1,15 +1,22 @@
-import { Routes } from '@angular/router';
-import { provideRouter } from '@angular/router';
-import { LoginComponent } from './components/login/login.component';
-import { ListaContatosComponent } from './components/lista-contatos/lista-contatos.component';
-import { AuthGuard } from './guards/auth-guard';
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { LoginComponent } from '././components/login/login.component';
+import { DashboardComponent } from '././components/dashboard/dashboard.component'; // exemplo de componente protegido
+import { AuthGuard } from './guards/auth.guard';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'contatos', pathMatch: 'full' },
-  { path: 'contatos', component: ListaContatosComponent, canActivate: [AuthGuard] },
   { path: 'login', component: LoginComponent },
+  { 
+    path: 'dashboard', 
+    component: DashboardComponent,
+    canActivate: [AuthGuard]  // só acessa se estiver logado
+  },
+  { path: '', redirectTo: 'dashboard', pathMatch: 'full' }, // rota default
+  { path: '**', redirectTo: 'dashboard' } // fallback
 ];
 
-
-export const APP_ROUTES = provideRouter(routes);
-export const AppRoutingModule = APP_ROUTES;
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
+export class AppRoutingModule {}
