@@ -9,8 +9,8 @@ import { FormsModule } from '@angular/forms';
     <div class="login-container">
       <h2>Login</h2>
       <form (submit)="login(); $event.preventDefault()">
-        <input [(ngModel)]="username" name="username" type="text" placeholder="Usuário" required />
-        <input [(ngModel)]="password" name="password" type="password" placeholder="Senha" required />
+        <input [(ngModel)]="email" name="email" type="text" placeholder="Usuário" required />
+        <input [(ngModel)]="senha" name="senha" type="password" placeholder="Senha" required />
         <button type="submit">Entrar</button>
       </form>
       <p class="message">{{ message }}</p>
@@ -51,12 +51,12 @@ import { FormsModule } from '@angular/forms';
   `]
 })
 export class LoginComponent {
-  username = '';
-  password = '';
+  email = '';
+  senha = '';
   message = '';
 
   login() {
-    if(this.username === 'admin' && this.password === '123') {
+    if(this.email === 'admin' && this.senha === '123') {
       this.message = 'Login realizado com sucesso!';
     } else {
       this.message = 'Usuário ou senha inválidos.';
