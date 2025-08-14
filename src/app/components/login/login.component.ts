@@ -1,36 +1,43 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { AuthApiService, LoginRequest } from '../../services/auth-api.service';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatCardModule } from '@angular/material/card';
+import { AuthApiService, LoginRequest } from '../../services/auth-api.service';
 
 @Component({
   selector: 'app-login',
-  standalone: true,
-  imports: [CommonModule, FormsModule, MatInputModule, MatButtonModule],
-  template: `
-    <h2>Login</h2>
-    <form (ngSubmit)="onSubmit()">
-      <input type="email" [(ngModel)]="email" name="email" placeholder="Email" required />
-      <input type="password" [(ngModel)]="senha" name="senha" placeholder="Senha" required />
-      <button type="submit">Entrar</button>
-    </form>
-    <p *ngIf="token">Token recebido: {{ token }}</p>
-  `
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule
+  ],
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
-  email = '';
-  senha = '';
+  loginForm: FormGroup;
   token: string | null = null;
 
-  constructor(private authService: AuthApiService) {}
-
-  onSubmit() {
-    const data: LoginRequest = { email: this.email, senha: this.senha };
-    this.authService.login(data).subscribe({
-      next: (res) => this.token = res.token,
-      error: (err) => console.error('Erro no login:', err)
+  constructor(private fb: FormBuilder, private authService: AuthApiService) {
+    this.loginForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      senha: ['', Validators.required]
     });
+  }
+
+  login() {
+    if (this.loginForm.valid) {
+      const data: LoginRequest = this.loginForm.value;
+      this.authService.login(data).subscribe({
+        next: (res) => this.token = res.token,
+        error: (err) => console.error('Erro no login:', err)
+      });
+    }
   }
 }

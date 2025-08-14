@@ -1,14 +1,13 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { importProvidersFrom } from '@angular/core';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app/app.component';
+import { provideHttpClient } from '@angular/common/http';
+import { provideAnimations } from '@angular/platform-browser/animations';
+import { AuthApiService } from './app/services/auth-api.service';
 
 bootstrapApplication(AppComponent, {
   providers: [
-    importProvidersFrom(
-      HttpClientModule,        
-      BrowserAnimationsModule  
-    )
+    provideHttpClient(),
+    provideAnimations(),
+    AuthApiService
   ]
 }).catch(err => console.error(err));
