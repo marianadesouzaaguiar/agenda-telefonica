@@ -1,40 +1,54 @@
-<form [formGroup]="loginForm" (ngSubmit)="login()" class="login-form">
-  <mat-card>
-    <mat-card-title>Login</mat-card-title>
-    <mat-card-content>
-      <mat-form-field appearance="fill" class="full-width">
-        <mat-label>Email</mat-label>
-        <input matInput formControlName="email" type="email" />
-        <mat-error *ngIf="loginForm.get('email')?.hasError('required')">
-          O email é obrigatório
-        </mat-error>
-        <mat-error *ngIf="loginForm.get('email')?.hasError('email')">
-          Digite um email válido
-        </mat-error>
-      </mat-form-field>
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-4">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h3 class="text-center mb-4">Login</h3>
 
-      <mat-form-field appearance="fill" class="full-width">
-        <mat-label>Senha</mat-label>
-        <input matInput formControlName="senha" type="password" />
-        <mat-error *ngIf="loginForm.get('senha')?.hasError('required')">
-          A senha é obrigatória
-        </mat-error>
-      </mat-form-field>
-    </mat-card-content>
-    <mat-card-actions>
-      <button mat-raised-button color="primary" type="submit" [disabled]="loginForm.invalid">
-        Entrar
-      </button>
-    </mat-card-actions>
-  </mat-card>
-</form>
+          <form (ngSubmit)="login()" #loginForm="ngForm">
+            <!-- Usuário -->
+            <div class="mb-3">
+              <label for="username" class="form-label">Usuário</label>
+              <input
+                type="text"
+                id="username"
+                name="username"
+                class="form-control"
+                [(ngModel)]="username"
+                required
+              />
+            </div>
 
-<style>
-.login-form {
-  max-width: 400px;
-  margin: 50px auto;
-}
-.full-width {
-  width: 100%;
-}
-</style>
+            <!-- Senha -
+             ->
+            <div class="mb-3">
+              <label for="password" class="form-label">Senha</label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                class="form-control"
+                [(ngModel)]="password"
+                required
+              />
+            </div>
+
+            <!-- Botão -->
+            <button
+              type="submit"
+              class="btn btn-primary w-100"
+              [disabled]="loginForm.invalid"
+            >
+              Entrar
+            </button>
+          </form>
+
+          <!-- Mensagem de erro -->
+          <p class="text-danger text-center mt-3" *ngIf="message">
+            {{ message }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

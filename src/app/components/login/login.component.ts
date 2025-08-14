@@ -1,43 +1,65 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatCardModule } from '@angular/material/card';
-import { AuthApiService, LoginRequest } from '../../services/auth-api.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    MatCardModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule
-  ],
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  standalone: true,
+  imports: [FormsModule],
+  template: `
+    <div class="login-container">
+      <h2>Login</h2>
+      <form (submit)="login(); $event.preventDefault()">
+        <input [(ngModel)]="email" name="email" type="text" placeholder="Usuário" required />
+        <input [(ngModel)]="senha" name="senha" type="password" placeholder="Senha" required />
+        <button type="submit">Entrar</button>
+      </form>
+      <p class="message">{{ message }}</p>
+    </div>
+  `,
+  styles: [`
+    .login-container {
+      max-width: 300px;
+      margin: 5rem auto;
+      padding: 1.5rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      text-align: center;
+      background: #f9f9f9;
+    }
+    input {
+      width: 100%;
+      padding: .5rem;
+      margin: .5rem 0;
+      box-sizing: border-box;
+    }
+    button {
+      width: 100%;
+      padding: .7rem;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .message {
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+  `]
 })
 export class LoginComponent {
-  loginForm: FormGroup;
-  token: string | null = null;
-
-  constructor(private fb: FormBuilder, private authService: AuthApiService) {
-    this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      senha: ['', Validators.required]
-    });
-  }
+  email = '';
+  senha = '';
+  message = '';
 
   login() {
-    if (this.loginForm.valid) {
-      const data: LoginRequest = this.loginForm.value;
-      this.authService.login(data).subscribe({
-        next: (res) => this.token = res.token,
-        error: (err) => console.error('Erro no login:', err)
-      });
+    if(this.email === 'admin' && this.senha === '123') {
+      this.message = 'Login realizado com sucesso!';
+    } else {
+      this.message = 'Usuário ou senha inválidos.';
     }
   }
 }
