@@ -1,65 +1,34 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { AuthApiService, LoginRequest } from '../../services/auth-api.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule],
+  imports: [CommonModule, FormsModule],
   template: `
-    <div class="login-container">
-      <h2>Login</h2>
-      <form (submit)="login(); $event.preventDefault()">
-        <input [(ngModel)]="email" name="email" type="text" placeholder="Usuário" required />
-        <input [(ngModel)]="senha" name="senha" type="password" placeholder="Senha" required />
-        <button type="submit">Entrar</button>
-      </form>
-      <p class="message">{{ message }}</p>
-    </div>
-  `,
-  styles: [`
-    .login-container {
-      max-width: 300px;
-      margin: 5rem auto;
-      padding: 1.5rem;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      text-align: center;
-      background: #f9f9f9;
-    }
-    input {
-      width: 100%;
-      padding: .5rem;
-      margin: .5rem 0;
-      box-sizing: border-box;
-    }
-    button {
-      width: 100%;
-      padding: .7rem;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #0056b3;
-    }
-    .message {
-      margin-top: 1rem;
-      font-weight: bold;
-    }
-  `]
+    <h2>Login</h2>
+    <form (ngSubmit)="onSubmit()">
+      <input type="email" [(ngModel)]="email" name="email" placeholder="Email" required />
+      <input type="password" [(ngModel)]="senha" name="senha" placeholder="Senha" required />
+      <button type="submit">Entrar</button>
+    </form>
+    <p *ngIf="token">Token recebido: {{ token }}</p>
+  `
 })
 export class LoginComponent {
   email = '';
   senha = '';
-  message = '';
+  token: string | null = null;
 
-  login() {
-    if(this.email === 'admin' && this.senha === '123') {
-      this.message = 'Login realizado com sucesso!';
-    } else {
-      this.message = 'Usuário ou senha inválidos.';
-    }
+  constructor(private authService: AuthApiService) {}
+
+  onSubmit() {
+    const data: LoginRequest = { email: this.email, senha: this.senha };
+    this.authService.login(data).subscribe({
+      next: (res) => this.token = res.token,
+      error: (err) => console.error('Erro no login:', err)
+    });
   }
 }
