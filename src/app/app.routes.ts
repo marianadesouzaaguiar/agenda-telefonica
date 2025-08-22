@@ -1,18 +1,10 @@
-// app.routes.ts (ou app-routing.module.ts)
-
 import { Routes } from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
-import { DashboardComponent } from './components/dashboard/dashboard.component'; 
-import { AuthGuard } from './guards/auth.guard'; 
+import { DashboardComponent } from './components/dashboard/dashboard.component'; // Importe seu DashboardComponent
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
-  { 
-    path: 'dashboard', 
-    component: DashboardComponent,
-    canActivate: [AuthGuard] // Proteja a rota do dashboard
-  },
-  // ... outras rotas (para contatos, etc.)
-  { path: '**', redirectTo: 'dashboard' } // Rota curinga
+  { path: 'dashboard', component: DashboardComponent }, // Verifique se esta rota existe
+  { path: '**', redirectTo: 'login' }
 ];
