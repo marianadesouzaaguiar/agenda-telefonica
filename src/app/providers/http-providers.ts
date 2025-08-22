@@ -1,4 +1,13 @@
-import { importProvidersFrom } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { provideServerRendering } from '@angular/platform-server';
+import { AppComponent } from '../app.component';
 
-export const httpProviders = importProvidersFrom(HttpClientModule);
+const config = {
+  providers: [
+    provideServerRendering() // This is the ONLY provider needed for SSR
+  ]
+};
+
+const bootstrap = () => bootstrapApplication(AppComponent, config);
+
+export default bootstrap;

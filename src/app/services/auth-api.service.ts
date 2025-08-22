@@ -2,18 +2,10 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-export interface LoginRequest {
-  email: string;
-  senha: string;
-}
+export interface LoginRequest { email: string; senha: string; }
+export interface LoginResponse { token: string; }
 
-export interface LoginResponse {
-  token: string;
-}
-
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class AuthApiService {
   private apiUrl = 'http://localhost:8081/auth';
 
