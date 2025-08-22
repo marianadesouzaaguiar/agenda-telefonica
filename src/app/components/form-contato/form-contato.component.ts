@@ -1,70 +1,67 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ContatoService } from '../../services/contato.service';
 
 @Component({
   selector: 'app-form-contato',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule],
-  template: `
-    <h2>Adicionar Contato</h2>
-    <form [formGroup]="contatoForm" (ngSubmit)="onSubmit()">
-      <label>
-        Nome:
-        <input type="text" formControlName="nome" />
-      </label>
-      <div *ngIf="contatoForm.get('nome')?.invalid && contatoForm.get('nome')?.touched">
-        Nome é obrigatório.
-      </div>
-
-      <label>
-        Telefone:
-        <input type="tel" formControlName="telefone" />
-      </label>
-      <div *ngIf="contatoForm.get('telefone')?.invalid && contatoForm.get('telefone')?.touched">
-        Telefone é obrigatório.
-      </div>
-
-      <label>
-        Email:
-        <input type="email" formControlName="email" />
-      </label>
-
-      <label>
-        Favorito:
-        <input type="checkbox" formControlName="favorito" />
-      </label>
-
-      <button type="submit" [disabled]="contatoForm.invalid">Salvar</button>
-    </form>
-  `,
-  styles: [`
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      max-width: 400px;
-    }
-  `]
+  imports: [CommonModule, ReactiveFormsModule],
+  templateUrl: './form-contato.component.html',
+  styleUrls: ['./form-contato.component.css']
 })
-export class FormContatoComponent {
-  contatoForm: FormGroup;
-  form: any;
+export class FormContatoComponent implements OnInit {
+  formContato!: FormGroup;
+  modoEdicao: boolean = false;
+  contatoId: number | null = null;
 
-  constructor(private fb: FormBuilder) {
-    this.contatoForm = this.fb.group({
-      nome: ['', Validators.required],
-      telefone: ['', Validators.required],
-      email: [''],
-      favorito: [false]
+  constructor(
+    private fb: FormBuilder,
+    private route: ActivatedRoute,
+    private router: Router,
+    private contatoService: ContatoService
+  ) {}
+
+  ngOnInit(): void {
+    this.initForm();
+    this.route.paramMap.subscribe(params => {
+      const idParam = params.get('id');
+      if (idParam) {
+        this.contatoId = +idParam;
+        this.modoEdicao = true;
+        this.contatoService.getContato(this.contatoId).subscribe(contato => {
+          this.formContato.patchValue(contato);
+        });
+      }
     });
   }
 
-  onSubmit() {
-    if (this.contatoForm.valid) {
-      console.log('Contato salvo:', this.contatoForm.value);
-      // salvar no backend futuramente
+  initForm(): void {
+    this.formContato = this.fb.group({
+      nome: ['', [Validators.required, Validators.minLength(3)]],
+      email: ['', [Validators.email]],
+      telefone: [''],
+      endereco: ['']
+    });
+  }
+
+  salvar(): void {
+    if (this.formContato.invalid) {
+      this.formContato.markAllAsTouched();
+      return;
+    }
+
+    const contatoData = this.formContato.value;
+    
+    if (this.modoEdicao && this.contatoId) {
+      this.contatoService.atualizarContato(this.contatoId, contatoData).subscribe(() => {
+        this.router.navigate(['/contatos']);
+      });
+    } else {
+      this.contatoService.adicionarContato(contatoData).subscribe(() => {
+        this.router.navigate(['/contatos']);
+      });
     }
   }
 }

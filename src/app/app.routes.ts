@@ -1,10 +1,13 @@
 import { Routes } from '@angular/router';
-import { LoginComponent } from './components/login/login.component';
-import { DashboardComponent } from './components/dashboard/dashboard.component'; // Importe seu DashboardComponent
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { ContatosComponent } from './components/contatos/contatos.component';
+import { FormContatoComponent } from './components/form-contato/form-contato.component';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
-  { path: 'login', component: LoginComponent },
-  { path: 'dashboard', component: DashboardComponent }, // Verifique se esta rota existe
-  { path: '**', redirectTo: 'login' }
+  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+  { path: 'dashboard', component: DashboardComponent },
+  { path: 'contatos', component: ContatosComponent },
+  { path: 'form-contato', component: FormContatoComponent },
+  // ... outras rotas
+  { path: '**', redirectTo: 'dashboard' } // Rota curinga para URLs não encontradas
 ];
