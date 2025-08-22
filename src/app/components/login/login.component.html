@@ -5,35 +5,27 @@
         <div class="card-body">
           <h3 class="text-center mb-4">Login</h3>
 
-          <form (ngSubmit)="login()" #loginForm="ngForm">
-            <!-- Usuário -->
+          <form [formGroup]="loginForm" (ngSubmit)="login()">
             <div class="mb-3">
-              <label for="username" class="form-label">Usuário</label>
+              <label for="email" class="form-label">Email</label>
               <input
                 type="text"
-                id="username"
-                name="username"
+                id="email"
+                formControlName="email"
                 class="form-control"
-                [(ngModel)]="username"
-                required
               />
             </div>
 
-            <!-- Senha -
-             ->
             <div class="mb-3">
-              <label for="password" class="form-label">Senha</label>
+              <label for="senha" class="form-label">Senha</label>
               <input
                 type="password"
-                id="password"
-                name="password"
+                id="senha"
+                formControlName="senha"
                 class="form-control"
-                [(ngModel)]="password"
-                required
               />
             </div>
 
-            <!-- Botão -->
             <button
               type="submit"
               class="btn btn-primary w-100"
@@ -43,7 +35,6 @@
             </button>
           </form>
 
-          <!-- Mensagem de erro -->
           <p class="text-danger text-center mt-3" *ngIf="message">
             {{ message }}
           </p>

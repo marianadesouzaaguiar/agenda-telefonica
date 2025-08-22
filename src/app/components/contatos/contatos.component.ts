@@ -1,25 +1,17 @@
-import { Component, OnInit } from '@angular/core';
-import { ContatoService } from '../../services/contato.service';
-import { Contato } from '../../models/Contato.model';
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterOutlet, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-contatos',
-  templateUrl: './contatos.component.html',
+  standalone: true,
+  imports: [CommonModule, RouterOutlet, RouterModule],
+  template: `
+    <div class="contatos-container">
+      <h2>Seus Contatos</h2>
+      <router-outlet></router-outlet>
+    </div>
+  `,
   styleUrls: ['./contatos.component.css']
 })
-export class ContatosComponent implements OnInit {
-  contatos: Contato[] = [];
-
-  constructor(private contatoService: ContatoService) { }
-
-  ngOnInit(): void {
-    this.carregarContatos();
-  }
-
-  carregarContatos(): void {
-    this.contatoService.getContatos().subscribe({ 
-      next: (data: Contato[]) => this.contatos = data, 
-      error: (err: any) => console.error(err) 
-    });
-  }
-}
+export class ContatosComponent { }

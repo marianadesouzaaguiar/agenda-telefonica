@@ -5,13 +5,10 @@ import { CommonModule } from '@angular/common';
   selector: 'app-favoritos',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './favoritos.component.html',
+  template: `
+    <h2>Contatos Favoritos</h2>
+    <p>Ainda não há contatos favoritos.</p>
+  `,
   styleUrls: ['./favoritos.component.css']
 })
-export class FavoritosComponent {
-  favoritos = [
-    { nome: 'João' },
-    { nome: 'Maria' },
-  ];
-  contatos: any;
-}
+export class FavoritosComponent { }
