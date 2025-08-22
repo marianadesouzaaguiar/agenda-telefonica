@@ -1,26 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common'; // Import CommonModule
 import { AuthService } from '../../services/auth.service';
-import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-navbar',
-  standalone: true,
-  imports: [CommonModule],
   templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.component.css']
+  styleUrls: ['./navbar.component.css'],
+  standalone: true, // Assuming this is a standalone component
+  imports: [CommonModule] // Add CommonModule to the imports array
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent {
   isLoggedIn: boolean = false;
 
-  constructor(private authService: AuthService) {}
-
-  ngOnInit() {
-    this.authService.isLoggedIn$.subscribe((status: boolean) => {
+  constructor(private authService: AuthService) {
+    this.authService.isAuthenticated$.subscribe((status: boolean) => {
       this.isLoggedIn = status;
     });
   }
 
-  logout() {
+  logout(): void {
     this.authService.logout();
   }
 }

@@ -1,15 +1,30 @@
-<div class="container mt-4">
-    <div class="card">
-      <div class="card-header bg-primary text-white">
-        Detalhes do Contato
-      </div>
-      <div class="card-body">
-        <h5 class="card-title">{{ contato.nome }}</h5>
-        <p class="card-text"><strong>Email:</strong> {{ contato.email }}</p>
-        <p class="card-text"><strong>Telefone:</strong> {{ contato.telefone }}</p>
-        <p class="card-text"><strong>Endereço:</strong> {{ contato.endereco }}</p>
-        <button class="btn btn-secondary" routerLink="/favoritos">Ver Favoritos</button>
-      </div>
-    </div>
+<div *ngIf="loading">
+  <p>Carregando detalhes do contato...</p>
+</div>
+
+<div *ngIf="contato && !loading">
+  <h2>Detalhes do Contato</h2>
+  <div>
+    <strong>Nome:</strong> {{ contato.nome }}
   </div>
-  
+  <div>
+    <strong>Telefone:</strong> {{ contato.telefone }}
+  </div>
+  <div>
+    <strong>Email:</strong> {{ contato.email }}
+  </div>
+  <div>
+    <strong>Favorito:</strong> {{ contato.favorito ? 'Sim' : 'Não' }}
+  </div>
+
+  <div class="actions">
+    <button (click)="editarContato()">Editar</button>
+    <button (click)="deletarContato()">Deletar</button>
+    <button (click)="voltarParaLista()">Voltar para a Lista</button>
+  </div>
+</div>
+
+<div *ngIf="!contato && !loading">
+  <p>Contato não encontrado.</p>
+  <button (click)="voltarParaLista()">Voltar para a Lista</button>
+</div>

@@ -1,52 +1,49 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  // Estado de login interno
-  private loggedIn = new BehaviorSubject<boolean>(this.hasToken());
+  private readonly TOKEN_KEY = 'authToken';
+  private isAuthenticatedSubject: BehaviorSubject<boolean>;
 
-  // Observable para outros componentes acompanharem login/logout
-  isLoggedIn$ = this.loggedIn.asObservable();
+  public isAuthenticated$: Observable<boolean>;
 
-  constructor() {}
-
-  /**
-   * Salva o token e atualiza estado para "logado"
-   */
-  login(token: string): void {
-    localStorage.setItem('token', token);
-    this.loggedIn.next(true);
+  constructor(
+    private router: Router,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {
+    let initialAuthStatus = false;
+    // CRITICAL: Only access localStorage if the code is running in a browser
+    if (isPlatformBrowser(this.platformId)) {
+      initialAuthStatus = !!localStorage.getItem(this.TOKEN_KEY);
+    }
+    this.isAuthenticatedSubject = new BehaviorSubject<boolean>(initialAuthStatus);
+    this.isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
   }
 
-  /**
-   * Remove token e atualiza estado para "deslogado"
-   */
-  logout(): void {
-    localStorage.removeItem('token');
-    this.loggedIn.next(false);
+  public login(token: string): void {
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem(this.TOKEN_KEY, token);
+      this.isAuthenticatedSubject.next(true);
+    }
   }
 
-  /**
-   * Verifica se o usuário está autenticado
-   */
-  isAuthenticated(): boolean {
-    return this.hasToken();
+  public logout(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.removeItem(this.TOKEN_KEY);
+      this.isAuthenticatedSubject.next(false);
+    }
+    this.router.navigate(['/login']);
   }
 
-  /**
-   * Retorna o token JWT
-   */
-  getToken(): string | null {
-    return localStorage.getItem('token');
-  }
-
-  /**
-   * Checa se existe token no localStorage
-   */
-  private hasToken(): boolean {
-    return !!localStorage.getItem('token');
+  public getToken(): string | null {
+    if (isPlatformBrowser(this.platformId)) {
+      return localStorage.getItem(this.TOKEN_KEY);
+    }
+    return null;
   }
 }

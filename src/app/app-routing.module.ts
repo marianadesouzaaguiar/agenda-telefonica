@@ -1,22 +1,19 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { LoginComponent } from '././components/login/login.component';
-import { DashboardComponent } from '././components/dashboard/dashboard.component'; // exemplo de componente protegido
-import { AuthGuard } from './guards/auth.guard';
+import { ListaContatosComponent } from './components/lista-contatos/lista-contatos.component';
+import { FormContatoComponent } from './components/form-contato/form-contato.component';
+import { DetalheContatoComponent } from './components/detalhe-contato/detalhe-contato.component'; // Importe o novo componente
 
 const routes: Routes = [
-  { path: 'login', component: LoginComponent },
-  { 
-    path: 'dashboard', 
-    component: DashboardComponent,
-    canActivate: [AuthGuard]  // só acessa se estiver logado
-  },
-  { path: '', redirectTo: 'dashboard', pathMatch: 'full' }, // rota default
-  { path: '**', redirectTo: 'dashboard' } // fallback
+  { path: '', component: ListaContatosComponent },
+  { path: 'form-contato', component: FormContatoComponent },
+  { path: 'form-contato/:id', component: FormContatoComponent },
+  { path: 'detalhe-contato/:id', component: DetalheContatoComponent }, // Adicione esta linha
+  { path: '**', redirectTo: '' }
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

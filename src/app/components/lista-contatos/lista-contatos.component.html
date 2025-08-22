@@ -1,28 +1,24 @@
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th>Nome</th>
-      <th>Celular</th>
-      <th>Email</th>
-      <th>Telefone</th>
-      <th>Favorito</th>
-      <th>Ações</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let c of contatos">
-      <td>{{ c.nome }}</td>
-      <td>{{ c.celular }}</td>
-      <td>{{ c.email }}</td>
-      <td>{{ c.telefone }}</td>
-      <td>
-        <button (click)="favoritar(c.id!)" class="btn btn-sm btn-warning">
-          {{ c.favorito === 'S' ? '⭐' : '✩' }}
-        </button>
-      </td>
-      <td>
-        <button (click)="inativar(c.id!)" class="btn btn-sm btn-danger">Inativar</button>
-      </td>
-    </tr>
-  </tbody>
-</table>
+<h2>Lista de Contatos</h2>
+<button routerLink="/form-contato">Adicionar Novo Contato</button>
+
+<div *ngIf="contatos.length > 0; else noContacts">
+  <ul>
+    <li *ngFor="let contato of contatos">
+      <div>
+        <a [routerLink]="['/detalhe-contato', contato.id]">
+          <h3>{{ contato.nome }}</h3>
+        </a>
+        <p>Telefone: {{ contato.telefone }}</p>
+        <p>Email: {{ contato.email }}</p>
+      </div>
+      <div>
+        <button (click)="editarContato(contato.id)">Editar</button>
+        <button (click)="deletarContato(contato.id)">Deletar</button>
+      </div>
+    </li>
+  </ul>
+</div>
+
+<ng-template #noContacts>
+  <p>Nenhum contato encontrado. Adicione um novo!</p>
+</ng-template>
