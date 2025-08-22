@@ -1,10 +1,13 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router'; // 👈 Importe o Router
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule],
+  imports: [
+    FormsModule
+  ],
   template: `
     <div class="login-container">
       <h2>Login</h2>
@@ -55,9 +58,14 @@ export class LoginComponent {
   senha = '';
   message = '';
 
+  // 👈 Injete o Router no construtor
+  constructor(private router: Router) {}
+
   login() {
-    if(this.email === 'admin' && this.senha === '123') {
+    if (this.email === 'admin' && this.senha === '123') {
       this.message = 'Login realizado com sucesso!';
+      // 👈 Redireciona para o dashboard
+      this.router.navigate(['/dashboard']);
     } else {
       this.message = 'Usuário ou senha inválidos.';
     }
